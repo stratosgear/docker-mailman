@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-MAINTAINER Fer Uria <fauria@gmail.com>
+LABEL maintainer="Stratos Gerakakis<stratosgear@gmail.com>"
 
 ENV URL_FQDN lists.example.com
 ENV EMAIL_FQDN lists.example.com

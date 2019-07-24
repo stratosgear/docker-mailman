@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+  mailman:
+    image: stratosgear/mailman
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    hostname: lists.hypervasis.com
+    env_file:
+      - .env
+    ports:
+      - "49780:80"
+      - "49725:25"
+    volumes:
+      - "mailman_logs_mailman:/var/log/mailman"
+      - "mailman_logs_exim4:/var/log/exim4"
+      - "mailman_logs_apache2:/var/log/apache2"
+      - "mailman_archives:/var/lib/mailman/archives"
+      - "mailman_lists:/var/lib/mailman/lists"
+      - "mailman_tlsd:/etc/exim4/tls.d"
+    networks:
+      - traefik
+    labels:
+      traefik.frontend.rule: Host:lists.hypervasis.com
+      traefik.enable: "true"
+      traefik.backend: mailman
+      traefik.default.protocol: http
+      traefik.port: "80"
+      traefik.docker.network: traefik
+
+networks:
+  traefik:
+    external: true
+
+volumes:
+  mailman_logs_mailman:
+    external: true
+  mailman_logs_exim4:
+    external: true
+  mailman_logs_apache2:
+    external: true
+  mailman_archives:
+    external: true
+  mailman_lists:
+    external: true
+  mailman_tlsd:
+    external: true
